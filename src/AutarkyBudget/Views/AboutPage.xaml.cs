@@ -29,7 +29,7 @@ namespace AutarkyBudget.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _ = _vm.OnAppearing();
+            _vm.OnAppearing();
         }
 
         #endregion

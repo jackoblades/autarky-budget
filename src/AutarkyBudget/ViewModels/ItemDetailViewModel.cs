@@ -1,7 +1,5 @@
-﻿using AutarkyBudget.Models;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace AutarkyBudget.ViewModels
@@ -9,34 +7,44 @@ namespace AutarkyBudget.ViewModels
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class ItemDetailViewModel : BaseViewModel
     {
-        private string itemId;
-        private string text;
-        private string description;
+        #region Properties
+
         public string Id { get; set; }
 
-        public string Text
-        {
-            get => text;
-            set => SetProperty(ref text, value);
-        }
+        public string Text { get => _text; set => SetProperty(ref _text, value); }
+        private string _text;
 
-        public string Description
-        {
-            get => description;
-            set => SetProperty(ref description, value);
-        }
+        public string Description { get => _description; set => SetProperty(ref _description, value); }
+        private string _description;
 
         public string ItemId
         {
             get
             {
-                return itemId;
+                return _itemId;
             }
             set
             {
-                itemId = value;
+                _itemId = value;
                 LoadItemId(value);
             }
+        }
+        private string _itemId;
+
+        #endregion
+
+        #region Constructors
+
+        public ItemDetailViewModel()
+        {
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void OnAppearing()
+        {
         }
 
         public async void LoadItemId(string itemId)
@@ -53,5 +61,7 @@ namespace AutarkyBudget.ViewModels
                 Debug.WriteLine("Failed to Load Item");
             }
         }
+
+        #endregion
     }
 }

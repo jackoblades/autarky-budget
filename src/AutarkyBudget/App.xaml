@@ -7,6 +7,10 @@
         <ResourceDictionary>
             <Color x:Key="PrimaryLight">#2196F3</Color>
             <Color x:Key="PrimaryDark">#222222</Color>
+            <Color x:Key="SecondaryLight">#DDDDDD</Color>
+            <Color x:Key="SecondaryDark">#444444</Color>
+            <Color x:Key="TextLight">#121212</Color>
+            <Color x:Key="TextDark">#EFEFEF</Color>
             <Color x:Key="AccentLight">#96d1ff</Color>
             <Color x:Key="AccentDark">#666666</Color>
             <Style TargetType="Button">

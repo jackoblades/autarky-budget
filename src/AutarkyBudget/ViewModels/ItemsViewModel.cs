@@ -10,14 +10,10 @@ namespace AutarkyBudget.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
-
         public ObservableCollection<Item> Items { get; }
-        public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
         public Command DeleteItemCommand { get; }
         public Command EditItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
 
         public ItemsViewModel()
         {
@@ -26,20 +22,19 @@ namespace AutarkyBudget.ViewModels
             Items = new ObservableCollection<Item>();
 
             // Commands.
-            LoadItemsCommand  = new Command(async () => await ExecuteLoadItemsCommand());
             AddItemCommand    = new Command(OnAddItem);
-            DeleteItemCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            EditItemCommand   = new Command(async () => await ExecuteLoadItemsCommand());
+            DeleteItemCommand = new Command(async () => await LoadItems());
+            EditItemCommand   = new Command(async () => await LoadItems());
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private async Task LoadItems()
         {
             IsBusy = true;
 
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = await DataStore.GetItemsAsync(true).ConfigureAwait(false);
                 foreach (var item in items)
                 {
                     Items.Add(item);
@@ -55,33 +50,14 @@ namespace AutarkyBudget.ViewModels
             }
         }
 
-        public void OnAppearing()
+        public async Task OnAppearing()
         {
-            IsBusy = true;
-            SelectedItem = null;
-        }
-
-        public Item SelectedItem
-        {
-            get => _selectedItem;
-            set
-            {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
-            }
+            await LoadItems().ConfigureAwait(false);
         }
 
         private async void OnAddItem(object obj)
         {
             await Shell.Current.GoToAsync(nameof(NewItemPage));
-        }
-
-        async void OnItemSelected(Item item)
-        {
-            if (item == null)
-                return;
-
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
         }
     }
 }

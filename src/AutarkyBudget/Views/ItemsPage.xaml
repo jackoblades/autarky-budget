@@ -3,15 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutarkyBudget.Views.ItemsPage"
              Title="{Binding Title}"
-             xmlns:local="clr-namespace:AutarkyBudget.ViewModels"
+             xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
              xmlns:model="clr-namespace:AutarkyBudget.Models"
-             x:Name="BrowseItemsPage">
+             x:DataType="viewmodels:ItemsViewModel"
+             x:Name="BrowseItemsPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}"/>
     </ContentPage.ToolbarItems>
 
-    <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+    <ContentPage.Content>
+
         <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -20,18 +23,19 @@
                             <SwipeItems>
                                 <SwipeItem Text="Edit"
                                            BackgroundColor="DeepSkyBlue"
-                                           Command="{Binding EditItemCommand}" />
+                                           Command="{Binding EditItemCommand}"/>
                             </SwipeItems>
                         </SwipeView.LeftItems>
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem Text="Delete"
                                            BackgroundColor="IndianRed"
-                                           Command="{Binding DeleteItemCommand}" />
+                                           Command="{Binding DeleteItemCommand}"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
 
-                        <Grid x:DataType="model:Item">
+                        <Grid x:DataType="model:Item"
+                              BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="2"/>
@@ -46,11 +50,13 @@
                             <Label Text="{Binding Name}"
                                    Grid.Row="0" Grid.Column="1"
                                    LineBreakMode="NoWrap"
-                                   TextColor="Black"/>
+                                   FontSize="Title"
+                                   TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"/>
                             <Label Text="{Binding Amount}"
                                    Grid.Row="0" Grid.Column="3"
                                    LineBreakMode="NoWrap"
-                                   TextColor="Black"/>
+                                   FontSize="Title"
+                                   TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"/>
                             <BoxView Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Black"/>
                             <BoxView Grid.Row="1" Grid.ColumnSpan="4" BackgroundColor="Black"/>
                         </Grid>
@@ -58,5 +64,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </RefreshView>
+
+    </ContentPage.Content>
 </ContentPage>

@@ -1,7 +1,9 @@
-﻿using Microcharts;
+﻿using AutarkyBudget.Extensions;
+using Microcharts;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace AutarkyBudget.ViewModels
 {
@@ -24,6 +26,7 @@ namespace AutarkyBudget.ViewModels
                 LabelTextSize = 48,
                 LabelMode = LabelMode.RightOnly,
                 AnimationDuration = new TimeSpan(0, 0, 1),
+                BackgroundColor = Application.Current.GetThemeColor(AppColorTypes.Secondary),
             };
 
             // Commands.

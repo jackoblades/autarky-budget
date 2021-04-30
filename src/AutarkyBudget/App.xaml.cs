@@ -5,6 +5,8 @@ namespace AutarkyBudget
 {
     public partial class App : Application
     {
+        #region Constructors
+
         public App()
         {
             InitializeComponent();
@@ -12,6 +14,10 @@ namespace AutarkyBudget
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
+
+        #endregion
+
+        #region Event Handlers
 
         protected override void OnStart()
         {
@@ -24,5 +30,7 @@ namespace AutarkyBudget
         protected override void OnResume()
         {
         }
+
+        #endregion
     }
 }

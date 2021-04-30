@@ -7,7 +7,7 @@
         <ResourceDictionary>
             <Color x:Key="PrimaryLight">#2196F3</Color>
             <Color x:Key="PrimaryDark">#222222</Color>
-            <Color x:Key="SecondaryLight">#DDDDDD</Color>
+            <Color x:Key="SecondaryLight">#EFEFEF</Color>
             <Color x:Key="SecondaryDark">#444444</Color>
             <Color x:Key="TextLight">#121212</Color>
             <Color x:Key="TextDark">#EFEFEF</Color>

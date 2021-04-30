@@ -1,11 +1,10 @@
 ﻿using AutarkyBudget.ViewModels;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace AutarkyBudget.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ItemsPage : ContentPage
+    public partial class ItemsPage : PageBase
     {
         #region Properties
 

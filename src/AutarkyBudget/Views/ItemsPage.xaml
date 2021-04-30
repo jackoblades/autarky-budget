@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AutarkyBudget.Views.ItemsPage"
-             Title="{Binding Title}"
-             xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
-             xmlns:model="clr-namespace:AutarkyBudget.Models"
-             x:DataType="viewmodels:ItemsViewModel"
-             x:Name="BrowseItemsPage"
-             BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}">
+<views:PageBase xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:model="clr-namespace:AutarkyBudget.Models"
+                xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
+                xmlns:views="clr-namespace:AutarkyBudget.Views"
+                x:Class="AutarkyBudget.Views.ItemsPage"
+                x:DataType="viewmodels:ItemsViewModel"
+                x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddItemCommand}"/>
@@ -66,4 +65,4 @@
         </CollectionView>
 
     </ContentPage.Content>
-</ContentPage>
+</views:PageBase>

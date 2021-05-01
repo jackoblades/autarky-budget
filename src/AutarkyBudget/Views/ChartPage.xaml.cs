@@ -8,7 +8,7 @@ namespace AutarkyBudget.Views
     {
         #region Properties
 
-        ChartViewModel _vm;
+        private readonly ChartViewModel _vm;
 
         #endregion
 

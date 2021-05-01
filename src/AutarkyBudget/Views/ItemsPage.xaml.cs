@@ -8,7 +8,7 @@ namespace AutarkyBudget.Views
     {
         #region Properties
 
-        ItemsViewModel _vm;
+        private readonly ItemsViewModel _vm;
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace AutarkyBudget.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _vm.OnAppearing();
+            _ = _vm.OnAppearingAsync();
         }
 
         #endregion

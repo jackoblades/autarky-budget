@@ -4,16 +4,31 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace AutarkyBudget.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
+        #region Properties
+
         public ObservableCollection<Item> Items { get; }
-        public Command AddItemCommand { get; }
-        public Command DeleteItemCommand { get; }
-        public Command EditItemCommand { get; }
+
+        public decimal Total { get => _total; set => SetProperty(ref _total, value); }
+        private decimal _total = 0M;
+
+        #endregion
+
+        #region ICommand
+
+        public ICommand AddItemCommand { get; }
+        public ICommand DeleteItemCommand { get; }
+        public ICommand EditItemCommand { get; }
+
+        #endregion
+
+        #region Constructors
 
         public ItemsViewModel()
         {
@@ -22,12 +37,16 @@ namespace AutarkyBudget.ViewModels
             Items = new ObservableCollection<Item>();
 
             // Commands.
-            AddItemCommand    = new Command(OnAddItem);
-            DeleteItemCommand = new Command<Item>(async (x) => await DeleteItem(x));
-            EditItemCommand   = new Command<Item>(async (x) => await DeleteItem(x));
+            AddItemCommand    = new Command(OnAddItemAsync);
+            DeleteItemCommand = new Command<Item>(async (x) => await DeleteItemAsync(x));
+            EditItemCommand   = new Command<Item>(async (x) => await DeleteItemAsync(x));
         }
 
-        private async Task LoadItems()
+        #endregion
+
+        #region Methods
+
+        private async Task LoadItemsAsync()
         {
             IsBusy = true;
 
@@ -39,6 +58,7 @@ namespace AutarkyBudget.ViewModels
                 {
                     Items.Add(item);
                 }
+                Total = Items.SumOfValues();
             }
             catch (Exception ex)
             {
@@ -50,7 +70,7 @@ namespace AutarkyBudget.ViewModels
             }
         }
 
-        private async Task DeleteItem(Item item)
+        private async Task DeleteItemAsync(Item item)
         {
             IsBusy = true;
 
@@ -58,6 +78,7 @@ namespace AutarkyBudget.ViewModels
             {
                 Items.Remove(item);
                 var items = await DataStore.DeleteItemAsync(item.Id).ConfigureAwait(false);
+                Total = Items.SumOfValues();
             }
             catch (Exception ex)
             {
@@ -69,14 +90,16 @@ namespace AutarkyBudget.ViewModels
             }
         }
 
-        public async Task OnAppearing()
+        public async Task OnAppearingAsync()
         {
-            await LoadItems().ConfigureAwait(false);
+            await LoadItemsAsync().ConfigureAwait(false);
         }
 
-        private async void OnAddItem(object obj)
+        private async void OnAddItemAsync(object obj)
         {
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
+
+        #endregion
     }
 }

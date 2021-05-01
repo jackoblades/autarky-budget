@@ -1,5 +1,7 @@
 ﻿using Microcharts;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AutarkyBudget.Models
 {
@@ -43,5 +45,13 @@ namespace AutarkyBudget.Models
         }
 
         #endregion
+    }
+
+    public static class ItemCollectionExtensions
+    {
+        public static decimal SumOfValues(this IEnumerable<Item> items)
+        {
+            return items.ToList().Sum(x => x.Value);
+        }
     }
 }

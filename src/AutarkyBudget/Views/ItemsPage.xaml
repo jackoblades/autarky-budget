@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:PageBase xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:templates="clr-namespace:AutarkyBudget.Views.Templates"
                 xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
-                xmlns:views="clr-namespace:AutarkyBudget.Views" xmlns:templates="clr-namespace:AutarkyBudget.Views.Templates"
+                xmlns:views="clr-namespace:AutarkyBudget.Views"
                 x:Class="AutarkyBudget.Views.ItemsPage"
                 x:DataType="viewmodels:ItemsViewModel"
                 x:Name="_ItemsPage">
@@ -13,14 +14,31 @@
 
     <ContentPage.Content>
 
-        <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <templates:SwipeItemListTemplate DeleteCommand="{Binding BindingContext.DeleteItemCommand, Source={x:Reference Name=_ItemsPage}}"
-                                                     EditCommand  ="{Binding BindingContext.EditItemCommand,   Source={x:Reference Name=_ItemsPage}}"/>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <StackLayout Orientation="Vertical">
+
+            <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <templates:SwipeItemListTemplate DeleteCommand="{Binding BindingContext.DeleteItemCommand, Source={x:Reference Name=_ItemsPage}}"
+                                                         EditCommand  ="{Binding BindingContext.EditItemCommand,   Source={x:Reference Name=_ItemsPage}}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Total:"
+                       TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
+                       FontSize="32"
+                       HorizontalOptions="StartAndExpand"
+                       Padding="5,0,0,0"/>
+                <Label Text="{Binding Total}"
+                       TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       HorizontalOptions="End"
+                       Padding="0,0,5,0"/>
+            </StackLayout>
+        </StackLayout>
 
     </ContentPage.Content>
 </views:PageBase>

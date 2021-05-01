@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:PageBase xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                xmlns:model="clr-namespace:AutarkyBudget.Models"
                 xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
-                xmlns:views="clr-namespace:AutarkyBudget.Views"
+                xmlns:views="clr-namespace:AutarkyBudget.Views" xmlns:templates="clr-namespace:AutarkyBudget.Views.Templates"
                 x:Class="AutarkyBudget.Views.ItemsPage"
                 x:DataType="viewmodels:ItemsViewModel"
-                x:Name="BrowseItemsPage">
+                x:Name="_ItemsPage">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddItemCommand}"/>
@@ -17,49 +16,8 @@
         <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <SwipeView>
-                        <SwipeView.LeftItems>
-                            <SwipeItems>
-                                <SwipeItem Text="Edit"
-                                           BackgroundColor="DeepSkyBlue"
-                                           Command="{Binding EditItemCommand}"/>
-                            </SwipeItems>
-                        </SwipeView.LeftItems>
-                        <SwipeView.RightItems>
-                            <SwipeItems>
-                                <SwipeItem Text="Delete"
-                                           BackgroundColor="IndianRed"
-                                           Command="{Binding DeleteItemCommand}"/>
-                            </SwipeItems>
-                        </SwipeView.RightItems>
-
-                        <Grid x:DataType="model:Item"
-                              BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="2"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Text="{Binding Name}"
-                                   Grid.Row="0" Grid.Column="1"
-                                   LineBreakMode="NoWrap"
-                                   FontSize="Title"
-                                   TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"/>
-                            <Label Text="{Binding Amount}"
-                                   Grid.Row="0" Grid.Column="3"
-                                   LineBreakMode="NoWrap"
-                                   FontSize="Title"
-                                   TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"/>
-                            <BoxView Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Black"/>
-                            <BoxView Grid.Row="1" Grid.ColumnSpan="4" BackgroundColor="Black"/>
-                        </Grid>
-                    </SwipeView>
+                    <templates:SwipeItemListTemplate DeleteCommand="{Binding BindingContext.DeleteItemCommand, Source={x:Reference Name=_ItemsPage}}"
+                                                     EditCommand  ="{Binding BindingContext.EditItemCommand,   Source={x:Reference Name=_ItemsPage}}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

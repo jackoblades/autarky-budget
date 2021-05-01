@@ -23,8 +23,8 @@ namespace AutarkyBudget.ViewModels
 
             // Commands.
             AddItemCommand    = new Command(OnAddItem);
-            DeleteItemCommand = new Command(async () => await LoadItems());
-            EditItemCommand   = new Command(async () => await LoadItems());
+            DeleteItemCommand = new Command<Item>(async (x) => await DeleteItem(x));
+            EditItemCommand   = new Command<Item>(async (x) => await DeleteItem(x));
         }
 
         private async Task LoadItems()
@@ -39,6 +39,25 @@ namespace AutarkyBudget.ViewModels
                 {
                     Items.Add(item);
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task DeleteItem(Item item)
+        {
+            IsBusy = true;
+
+            try
+            {
+                Items.Remove(item);
+                var items = await DataStore.DeleteItemAsync(item.Id).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

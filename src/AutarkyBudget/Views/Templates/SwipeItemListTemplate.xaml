@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:AutarkyBudget.Models"
+             xmlns:templates="clr-namespace:AutarkyBudget.Views.Templates"
+             x:Class="AutarkyBudget.Views.Templates.SwipeItemListTemplate"
+             x:Name="_SwipeItemListTemplate">
+
+    <ContentView.Content>
+        <SwipeView x:DataType="model:Item">
+            <SwipeView.LeftItems>
+                <SwipeItems>
+                    <SwipeItem Text="Edit"
+                               BackgroundColor="DeepSkyBlue"
+                               Command="{Binding EditCommand, Source={x:Reference Name=_SwipeItemListTemplate}}"
+                               CommandParameter="{Binding .}"/>
+                </SwipeItems>
+            </SwipeView.LeftItems>
+            <SwipeView.RightItems>
+                <SwipeItems>
+                    <SwipeItem Text="Delete"
+                               BackgroundColor="IndianRed"
+                               Command="{Binding DeleteCommand, Source={x:Reference Name=_SwipeItemListTemplate}}"
+                               CommandParameter="{Binding .}"/>
+                </SwipeItems>
+            </SwipeView.RightItems>
+
+            <templates:ItemListTemplate/>
+        </SwipeView>
+    </ContentView.Content>
+</ContentView>

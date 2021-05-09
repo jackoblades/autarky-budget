@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:PageBase xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:behaviors="clr-namespace:AutarkyBudget.Behaviors"
                 xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
                 xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
                 xmlns:views="clr-namespace:AutarkyBudget.Views"
@@ -10,14 +11,39 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <microcharts:ChartView Grid.Column="0" Grid.Row="0"
-                                   Chart="{Binding Chart}"/>
+            <Picker Grid.Column="0" Grid.Row="0"
+                    ItemsSource="{Binding ChartTypes}"
+                    SelectedItem="{Binding SelectedChart}"
+                    FontSize="Title"
+                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}">
+                <Picker.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                                      Command="{Binding ChartChangedCommand}" />
+                </Picker.Behaviors>
+            </Picker>
+
+            <microcharts:ChartView Grid.Column="0" Grid.Row="1"
+                                   Chart="{Binding PieChart}"
+                                   IsVisible="{Binding IsPieChartVisible}"/>
+
+            <microcharts:ChartView Grid.Column="0" Grid.Row="1"
+                                   Chart="{Binding DonutChart}"
+                                   IsVisible="{Binding IsDonutChartVisible}"/>
+
+            <microcharts:ChartView Grid.Column="0" Grid.Row="1"
+                                   Chart="{Binding RadialGaugeChart}"
+                                   IsVisible="{Binding IsRadialGaugeChartVisible}"/>
+
+            <microcharts:ChartView Grid.Column="0" Grid.Row="1"
+                                   Chart="{Binding BarChart}"
+                                   IsVisible="{Binding IsBarChartVisible}"/>
         </Grid>
     </ContentPage.Content>
 </views:PageBase>

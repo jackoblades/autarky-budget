@@ -9,7 +9,7 @@ namespace AutarkyBudget.Models
     {
         #region Properties
 
-        private static Random rng = new Random();
+        private static readonly Random rng = new Random();
 
         public string Id { get; set; }
 

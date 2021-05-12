@@ -1,9 +1,8 @@
 ﻿using AutarkyBudget.Models;
+using AutarkyBudget.Repository.Interfaces;
 using AutarkyBudget.Views;
-using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -12,6 +11,8 @@ namespace AutarkyBudget.ViewModels
     public class ItemsViewModel : BaseViewModel
     {
         #region Properties
+
+        private readonly IItemRepository _itemRepository;
 
         public ObservableCollection<Item> Items { get; }
 
@@ -32,67 +33,52 @@ namespace AutarkyBudget.ViewModels
 
         public ItemsViewModel()
         {
+            // Services.
+            _itemRepository = DependencyService.Get<IItemRepository>();
+
             // Bindings.
             Title = "Budget";
             Items = new ObservableCollection<Item>();
 
             // Commands.
             AddItemCommand    = new Command(OnAddItemAsync);
-            DeleteItemCommand = new Command<Item>(async (x) => await DeleteItemAsync(x));
-            EditItemCommand   = new Command<Item>(async (x) => await DeleteItemAsync(x));
+            DeleteItemCommand = new Command<Item>((x) => DeleteItem(x));
+            EditItemCommand   = new Command<Item>((x) => DeleteItem(x));
         }
 
         #endregion
 
         #region Methods
 
-        private async Task LoadItemsAsync()
+        private void LoadItems()
         {
             IsBusy = true;
 
-            try
+            Items.Clear();
+            var items = _itemRepository.GetAll();
+            foreach (var item in items ?? Enumerable.Empty<Item>())
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true).ConfigureAwait(false);
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                }
-                Total = Items.SumOfValues();
+                Items.Add(item);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            Total = Items.SumOfValues();
+
+            IsBusy = false;
         }
 
-        private async Task DeleteItemAsync(Item item)
+        private void DeleteItem(Item item)
         {
             IsBusy = true;
 
-            try
-            {
-                Items.Remove(item);
-                var items = await DataStore.DeleteItemAsync(item.Id).ConfigureAwait(false);
-                Total = Items.SumOfValues();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            Items.Remove(item);
+            _ = _itemRepository.Remove(item);
+            Total = Items.SumOfValues();
+
+            IsBusy = false;
         }
 
-        public async Task OnAppearingAsync()
+        public void OnAppearing()
         {
-            await LoadItemsAsync().ConfigureAwait(false);
+            LoadItems();
         }
 
         private async void OnAddItemAsync(object obj)

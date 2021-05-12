@@ -1,60 +1,77 @@
 ﻿using AutarkyBudget.Models;
+using AutarkyBudget.Repository.Interfaces;
 using System;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace AutarkyBudget.ViewModels
 {
     public class NewItemViewModel : BaseViewModel
     {
-        private string text;
-        private string description;
+        #region Properties
+
+        private readonly IItemRepository _itemRepository;
+
+        public string Text { get => _text; set => SetProperty(ref _text, value); }
+        private string _text;
+
+        public string Description { get => _description; set => SetProperty(ref _description, value); }
+        private string _description;
+
+        #endregion
+
+        #region ICommand
+
+        public Command SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        #endregion
+
+        #region Constructors
 
         public NewItemViewModel()
         {
-            SaveCommand = new Command(OnSave, ValidateSave);
-            CancelCommand = new Command(OnCancel);
-            this.PropertyChanged +=
-                (_, __) => SaveCommand.ChangeCanExecute();
+            // Services.
+            _itemRepository = DependencyService.Get<IItemRepository>();
+
+            // Bindings.
+            Title = "New";
+
+            // Commands.
+            SaveCommand   = new Command(ExecuteSave, ValidateSave);
+            CancelCommand = new Command(ExecuteCancel);
+            this.PropertyChanged += (_, __) => SaveCommand.ChangeCanExecute();
         }
+
+        #endregion
+
+        #region Methods
 
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(text)
-                && !String.IsNullOrWhiteSpace(description);
+            return !string.IsNullOrWhiteSpace(_text)
+                && !string.IsNullOrWhiteSpace(_description);
         }
 
-        public string Text
-        {
-            get => text;
-            set => SetProperty(ref text, value);
-        }
-
-        public string Description
-        {
-            get => description;
-            set => SetProperty(ref description, value);
-        }
-
-        public Command SaveCommand { get; }
-        public Command CancelCommand { get; }
-
-        private async void OnCancel()
+        private async void ExecuteCancel()
         {
             await Shell.Current.GoToAsync("..");
         }
 
-        private async void OnSave()
+        private async void ExecuteSave()
         {
-            Item newItem = new Item()
+            var item = new Item()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = Text,
-                Amount = Description
+                Amount = Description,
             };
 
-            await DataStore.AddItemAsync(newItem);
+            _itemRepository.Add(item);
 
             await Shell.Current.GoToAsync("..");
         }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microcharts;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,14 @@ namespace AutarkyBudget.Models
 
         private static readonly Random rng = new Random();
 
+        [PrimaryKey]
         public string Id { get; set; }
 
         public string Name { get; set; }
 
         public string Amount { get; set; }
 
+        [Ignore]
         public decimal Value => decimal.TryParse(Amount, out decimal result) ? result : 0M;
 
         #endregion

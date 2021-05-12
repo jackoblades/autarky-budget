@@ -1,4 +1,4 @@
-﻿using AutarkyBudget.Services;
+﻿using AutarkyBudget.Repository;
 using Xamarin.Forms;
 
 namespace AutarkyBudget
@@ -10,8 +10,7 @@ namespace AutarkyBudget
         public App()
         {
             InitializeComponent();
-
-            DependencyService.Register<MockDataStore>();
+            RegisterServices();
             MainPage = new AppShell();
         }
 
@@ -29,6 +28,15 @@ namespace AutarkyBudget
 
         protected override void OnResume()
         {
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void RegisterServices()
+        {
+            DependencyService.Register<ItemRepository>();
         }
 
         #endregion

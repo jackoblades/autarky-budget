@@ -28,7 +28,13 @@ namespace AutarkyBudget.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _ = _vm.OnAppearing();
+            _vm.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            _vm.OnDisappearing();
+            base.OnDisappearing();
         }
 
         #endregion

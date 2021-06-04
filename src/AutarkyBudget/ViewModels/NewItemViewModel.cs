@@ -40,7 +40,7 @@ namespace AutarkyBudget.ViewModels
             // Commands.
             SaveCommand   = new Command(ExecuteSave, ValidateSave);
             CancelCommand = new Command(ExecuteCancel);
-            this.PropertyChanged += (_, __) => SaveCommand.ChangeCanExecute();
+            PropertyChanged += (_, __) => SaveCommand.ChangeCanExecute();
         }
 
         #endregion
@@ -70,6 +70,10 @@ namespace AutarkyBudget.ViewModels
             _itemRepository.Add(item);
 
             await Shell.Current.GoToAsync("..");
+        }
+
+        public void OnAppearing()
+        {
         }
 
         #endregion

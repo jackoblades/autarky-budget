@@ -1,9 +1,9 @@
 ﻿using AutarkyBudget.Extensions;
+using AutarkyBudget.Repository.Interfaces;
+using AutarkyBudget.Services;
 using Microcharts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -12,6 +12,8 @@ namespace AutarkyBudget.ViewModels
     public class ChartViewModel : BaseViewModel
     {
         #region Properties
+
+        private readonly IItemRepository _itemRepository;
 
         public IEnumerable<string> ChartTypes { get; private set; }
 
@@ -54,33 +56,15 @@ namespace AutarkyBudget.ViewModels
 
         public ChartViewModel()
         {
+            // Services.
+            _itemRepository = DependencyService.Get<IItemRepository>();
+
             // Bindings.
             Title = "Budget";
-            PieChart = new PieChart()
-            {
-                AnimationDuration = new TimeSpan(0, 0, 1),
-                BackgroundColor = Application.Current.GetThemeColor(AppColorTypes.Secondary),
-                LabelMode = LabelMode.RightOnly,
-                LabelTextSize = 48f,
-            };
-            DonutChart = new DonutChart()
-            {
-                AnimationDuration = new TimeSpan(0, 0, 1),
-                BackgroundColor = Application.Current.GetThemeColor(AppColorTypes.Secondary),
-                LabelMode = LabelMode.RightOnly,
-                LabelTextSize = 48f,
-            };
-            RadialGaugeChart = new RadialGaugeChart()
-            {
-                AnimationDuration = new TimeSpan(0, 0, 1),
-                BackgroundColor = Application.Current.GetThemeColor(AppColorTypes.Secondary),
-                LabelTextSize = 48f,
-            };
-            BarChart = new BarChart()
-            {
-                AnimationDuration = new TimeSpan(0, 0, 1),
-                BackgroundColor = Application.Current.GetThemeColor(AppColorTypes.Secondary),
-            };
+            PieChart         = ChartBuilder.BuildPieChart();
+            DonutChart       = ChartBuilder.BuildDonutChart();
+            RadialGaugeChart = ChartBuilder.BuildRadialGaugeChart();
+            BarChart         = ChartBuilder.BuildBarChart();
             ChartTypes = new List<string>()
             {
                 nameof(PieChart),
@@ -99,13 +83,20 @@ namespace AutarkyBudget.ViewModels
 
         #region Methods
 
-        public async Task OnAppearing()
+        public void OnAppearing()
         {
-            IEnumerable<ChartEntry> entries = (await DataStore.GetItemsAsync(true)).Select(x => x.ToChartEntry()).ToList();
+            IEnumerable<ChartEntry> entries = _itemRepository.GetAll().Select(x => x.ToChartEntry()).ToList();
             PieChart.Entries         = entries;
             DonutChart.Entries       = entries;
             RadialGaugeChart.Entries = entries;
             BarChart.Entries         = entries;
+
+            Application.Current.RequestedThemeChanged += UpdateChartBackground;
+        }
+
+        public void OnDisappearing()
+        {
+            Application.Current.RequestedThemeChanged -= UpdateChartBackground;
         }
 
         private void ExecuteChartChanged()
@@ -137,6 +128,14 @@ namespace AutarkyBudget.ViewModels
                     IsBarChartVisible         = true;
                     break;
             }
+        }
+
+        private void UpdateChartBackground(object source, AppThemeChangedEventArgs e)
+        {
+            PieChart.BackgroundColor         = Application.Current.GetThemeColor(AppColorTypes.Secondary);
+            DonutChart.BackgroundColor       = Application.Current.GetThemeColor(AppColorTypes.Secondary);
+            RadialGaugeChart.BackgroundColor = Application.Current.GetThemeColor(AppColorTypes.Secondary);
+            BarChart.BackgroundColor         = Application.Current.GetThemeColor(AppColorTypes.Secondary);
         }
 
         #endregion

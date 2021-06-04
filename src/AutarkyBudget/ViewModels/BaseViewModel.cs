@@ -1,17 +1,12 @@
-﻿using AutarkyBudget.Models;
-using AutarkyBudget.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
 
 namespace AutarkyBudget.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
         public bool IsBusy { get { return _isBusy; } set { SetProperty(ref _isBusy, value); } }
         bool _isBusy = false;
 

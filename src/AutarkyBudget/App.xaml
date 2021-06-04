@@ -11,6 +11,8 @@
             <Color x:Key="SecondaryDark">#444444</Color>
             <Color x:Key="TextLight">#121212</Color>
             <Color x:Key="TextDark">#EFEFEF</Color>
+            <Color x:Key="HintLight">#898989</Color>
+            <Color x:Key="HintDark">#9A9A9A</Color>
             <Color x:Key="AccentLight">#96d1ff</Color>
             <Color x:Key="AccentDark">#666666</Color>
             <Style TargetType="Button">

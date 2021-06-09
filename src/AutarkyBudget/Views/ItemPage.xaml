@@ -1,23 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <views:PageBase xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AutarkyBudget.Views.NewItemPage"
-             Shell.PresentationMode="ModalAnimated"
-             Title="New Item"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-             xmlns:views="clr-namespace:AutarkyBudget.Views"
-             ios:Page.UseSafeArea="true">
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+                xmlns:views="clr-namespace:AutarkyBudget.Views"
+                xmlns:viewmodels="clr-namespace:AutarkyBudget.ViewModels"
+                Shell.PresentationMode="ModalAnimated"
+                ios:Page.UseSafeArea="true"
+                x:Class="AutarkyBudget.Views.ItemPage"
+                x:DataType="viewmodels:ItemViewModel"
+                x:Name="_ItemPage">
+
     <ContentPage.Content>
         <StackLayout Spacing="3" Padding="15">
             <Entry Placeholder="Text"
                    PlaceholderColor="{AppThemeBinding Light={StaticResource HintLight}, Dark={StaticResource HintDark}}"
-                   Text="{Binding Text}"
+                   Text="{Binding Name}"
                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
+                   Keyboard="Default"
                    FontSize="Medium"/>
             <Entry Placeholder="Description"
                    PlaceholderColor="{AppThemeBinding Light={StaticResource HintLight}, Dark={StaticResource HintDark}}"
-                   Text="{Binding Description}"
+                   Text="{Binding Amount}"
                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
+                   Keyboard="Numeric"
                    FontSize="Medium"/>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Cancel"

@@ -3,6 +3,7 @@ using AutarkyBudget.Repository.Interfaces;
 using AutarkyBudget.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -41,9 +42,9 @@ namespace AutarkyBudget.ViewModels
             Items = new ObservableCollection<Item>();
 
             // Commands.
-            AddItemCommand    = new Command(OnAddItemAsync);
+            AddItemCommand    = new Command(async () => await OnAddItemAsync());
             DeleteItemCommand = new Command<Item>((x) => DeleteItem(x));
-            EditItemCommand   = new Command<Item>((x) => DeleteItem(x));
+            EditItemCommand   = new Command<Item>(async (x) => await EditItemAsync(x));
         }
 
         #endregion
@@ -76,14 +77,19 @@ namespace AutarkyBudget.ViewModels
             IsBusy = false;
         }
 
+        private async Task EditItemAsync(Item item)
+        {
+            await Shell.Current.GoToAsync($"{nameof(ItemPage)}?id={item.Id}");
+        }
+
         public void OnAppearing()
         {
             LoadItems();
         }
 
-        private async void OnAddItemAsync(object obj)
+        private async Task OnAddItemAsync()
         {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
+            await Shell.Current.GoToAsync(nameof(ItemPage));
         }
 
         #endregion

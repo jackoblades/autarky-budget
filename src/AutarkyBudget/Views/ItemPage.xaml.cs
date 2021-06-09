@@ -1,23 +1,29 @@
-﻿using AutarkyBudget.Models;
-using AutarkyBudget.ViewModels;
+﻿using AutarkyBudget.ViewModels;
+using Xamarin.Forms;
 
 namespace AutarkyBudget.Views
 {
-    public partial class NewItemPage : PageBase
+    [QueryProperty(nameof(ItemId), "id")]
+    public partial class ItemPage : PageBase
     {
         #region Properties
 
-        private readonly NewItemViewModel _vm;
+        private readonly ItemViewModel _vm;
+
+        public string ItemId
+        {
+            set => _vm.ItemId = value;
+        }
 
         #endregion
 
         #region Constructors
 
-        public NewItemPage()
+        public ItemPage()
         {
             InitializeComponent();
 
-            BindingContext = _vm = new NewItemViewModel();
+            BindingContext = _vm = new ItemViewModel();
         }
 
         #endregion

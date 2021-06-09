@@ -6,17 +6,20 @@ using Xamarin.Forms;
 
 namespace AutarkyBudget.ViewModels
 {
-    public class NewItemViewModel : BaseViewModel
+    public class ItemViewModel : BaseViewModel
     {
         #region Properties
 
         private readonly IItemRepository _itemRepository;
 
-        public string Text { get => _text; set => SetProperty(ref _text, value); }
-        private string _text;
+        public string Name { get => _name; set => SetProperty(ref _name, value); }
+        private string _name;
 
-        public string Description { get => _description; set => SetProperty(ref _description, value); }
-        private string _description;
+        public string Amount { get => _amount; set => SetProperty(ref _amount, value); }
+        private string _amount;
+
+        public string ItemId { get => _itemId; set => SetProperty(ref _itemId, value); }
+        private string _itemId;
 
         #endregion
 
@@ -29,7 +32,7 @@ namespace AutarkyBudget.ViewModels
 
         #region Constructors
 
-        public NewItemViewModel()
+        public ItemViewModel()
         {
             // Services.
             _itemRepository = DependencyService.Get<IItemRepository>();
@@ -49,8 +52,8 @@ namespace AutarkyBudget.ViewModels
 
         private bool ValidateSave()
         {
-            return !string.IsNullOrWhiteSpace(_text)
-                && !string.IsNullOrWhiteSpace(_description);
+            return !string.IsNullOrWhiteSpace(_name)
+                && !string.IsNullOrWhiteSpace(_amount);
         }
 
         private async void ExecuteCancel()
@@ -62,18 +65,24 @@ namespace AutarkyBudget.ViewModels
         {
             var item = new Item()
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = Text,
-                Amount = Description,
+                Id = string.IsNullOrEmpty(ItemId) ? Guid.NewGuid().ToString() : ItemId,
+                Name = Name,
+                Amount = Amount,
             };
 
-            _itemRepository.Add(item);
+            _itemRepository.Upsert(item);
 
             await Shell.Current.GoToAsync("..");
         }
 
         public void OnAppearing()
         {
+            if (!string.IsNullOrEmpty(ItemId))
+            {
+                Item item = _itemRepository.Get(ItemId);
+                Name = item.Name;
+                Amount = item.Amount;
+            }
         }
 
         #endregion

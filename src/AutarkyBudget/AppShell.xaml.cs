@@ -8,7 +8,7 @@ namespace AutarkyBudget
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            Routing.RegisterRoute(nameof(ItemPage), typeof(ItemPage));
         }
     }
 }

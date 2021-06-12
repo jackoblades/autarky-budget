@@ -1,6 +1,7 @@
 ﻿using AutarkyBudget.Models;
 using AutarkyBudget.Repository.Interfaces;
 using AutarkyBudget.Views;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,8 +57,8 @@ namespace AutarkyBudget.ViewModels
             IsBusy = true;
 
             Items.Clear();
-            var items = _itemRepository.GetAll();
-            foreach (var item in items ?? Enumerable.Empty<Item>())
+            IEnumerable<Item> items = _itemRepository.GetAll().OrderBy(x => x.CreationTime);
+            foreach (Item item in items ?? Enumerable.Empty<Item>())
             {
                 Items.Add(item);
             }

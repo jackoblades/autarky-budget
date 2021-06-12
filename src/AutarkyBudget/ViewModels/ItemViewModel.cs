@@ -12,6 +12,8 @@ namespace AutarkyBudget.ViewModels
 
         private readonly IItemRepository _itemRepository;
 
+        private DateTimeOffset? _knownTime = null;
+
         public string Name { get => _name; set => SetProperty(ref _name, value); }
         private string _name;
 
@@ -66,6 +68,7 @@ namespace AutarkyBudget.ViewModels
             var item = new Item()
             {
                 Id = string.IsNullOrEmpty(ItemId) ? Guid.NewGuid().ToString() : ItemId,
+                CreationTime = _knownTime ?? DateTimeOffset.Now,
                 Name = Name,
                 Amount = Amount,
             };
@@ -80,6 +83,7 @@ namespace AutarkyBudget.ViewModels
             if (!string.IsNullOrEmpty(ItemId))
             {
                 Item item = _itemRepository.Get(ItemId);
+                _knownTime = item.CreationTime;
                 Name = item.Name;
                 Amount = item.Amount;
             }

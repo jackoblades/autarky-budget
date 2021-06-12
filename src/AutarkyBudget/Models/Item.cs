@@ -19,6 +19,8 @@ namespace AutarkyBudget.Models
 
         public string Amount { get; set; }
 
+        public DateTimeOffset CreationTime { get; set; }
+
         [Ignore]
         public decimal Value => decimal.TryParse(Amount, out decimal result) ? result : 0M;
 

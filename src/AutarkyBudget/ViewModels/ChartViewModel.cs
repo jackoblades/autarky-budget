@@ -85,7 +85,7 @@ namespace AutarkyBudget.ViewModels
 
         public void OnAppearing()
         {
-            IEnumerable<ChartEntry> entries = _itemRepository.GetAll().Select(x => x.ToChartEntry()).ToList();
+            IEnumerable<ChartEntry> entries = _itemRepository.GetAll().OrderBy(x => x.CreationTime).Select(x => x.ToChartEntry()).ToList();
             PieChart.Entries         = entries;
             DonutChart.Entries       = entries;
             RadialGaugeChart.Entries = entries;

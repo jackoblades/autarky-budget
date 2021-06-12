@@ -12,13 +12,13 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="3" Padding="15">
-            <Entry Placeholder="Text"
+            <Entry Placeholder="Expense Name"
                    PlaceholderColor="{AppThemeBinding Light={StaticResource HintLight}, Dark={StaticResource HintDark}}"
                    Text="{Binding Name}"
                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
-                   Keyboard="Default"
+                   Keyboard="Chat"
                    FontSize="Medium"/>
-            <Entry Placeholder="Description"
+            <Entry Placeholder="Amount"
                    PlaceholderColor="{AppThemeBinding Light={StaticResource HintLight}, Dark={StaticResource HintDark}}"
                    Text="{Binding Amount}"
                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"

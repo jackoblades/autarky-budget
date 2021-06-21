@@ -36,7 +36,7 @@ namespace AutarkyBudget
 
         private void RegisterServices()
         {
-            DependencyService.Register<ItemRepository>();
+            DependencyService.Register<BudgetItemRepository>();
         }
 
         #endregion

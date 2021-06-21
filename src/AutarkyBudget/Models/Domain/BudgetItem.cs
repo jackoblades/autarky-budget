@@ -1,34 +1,32 @@
 ﻿using Microcharts;
-using SQLite;
+using NodaMoney;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AutarkyBudget.Models
+namespace AutarkyBudget.Models.Domain
 {
-    public class Item
+    public class BudgetItem
     {
         #region Properties
 
         private static readonly Random rng = new Random();
 
-        [PrimaryKey]
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public string Amount { get; set; }
+        public Money Money { get; set; }
 
         public DateTimeOffset CreationTime { get; set; }
 
-        [Ignore]
-        public decimal Value => decimal.TryParse(Amount, out decimal result) ? result : 0M;
+        public string Amount => Money.Amount.ToString();
 
         #endregion
 
         #region Constructors
 
-        public Item()
+        public BudgetItem()
         {
         }
 
@@ -40,7 +38,7 @@ namespace AutarkyBudget.Models
         {
             var color = new SkiaSharp.SKColor((byte)rng.Next(256), (byte)rng.Next(256), (byte)rng.Next(256), byte.MaxValue);
 
-            return new ChartEntry((float)Value)
+            return new ChartEntry((float)Money.Amount)
             {
                 Label           = Name,
                 Color           = color,
@@ -54,9 +52,20 @@ namespace AutarkyBudget.Models
 
     public static class ItemCollectionExtensions
     {
-        public static decimal SumOfValues(this IEnumerable<Item> items)
+        public static Money SumOfValues(this IEnumerable<BudgetItem> values)
         {
-            return items.ToList().Sum(x => x.Value);
+            IList<BudgetItem> items = values?.ToList() ?? Enumerable.Empty<BudgetItem>().ToList();
+            if (!items.Any())
+                return new Money();
+
+            Money sum = new Money(0m, items[0].Money.Currency.Code);
+
+            foreach (BudgetItem item in items)
+            {
+                sum = Money.Add(sum, item.Money);
+            }
+
+            return sum;
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using AutarkyBudget.Models;
+﻿using AutarkyBudget.Models.Domain;
 using AutarkyBudget.Repository.Interfaces;
 using AutarkyBudget.Views;
+using NodaMoney;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,12 +15,12 @@ namespace AutarkyBudget.ViewModels
     {
         #region Properties
 
-        private readonly IItemRepository _itemRepository;
+        private readonly IBudgetItemRepository _itemRepository;
 
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<BudgetItem> Items { get; }
 
-        public decimal Total { get => _total; set => SetProperty(ref _total, value); }
-        private decimal _total = 0M;
+        public Money Total { get => _total; set => SetProperty(ref _total, value); }
+        private Money _total = new Money();
 
         #endregion
 
@@ -36,16 +37,16 @@ namespace AutarkyBudget.ViewModels
         public ItemsViewModel()
         {
             // Services.
-            _itemRepository = DependencyService.Get<IItemRepository>();
+            _itemRepository = DependencyService.Get<IBudgetItemRepository>();
 
             // Bindings.
             Title = "Budget";
-            Items = new ObservableCollection<Item>();
+            Items = new ObservableCollection<BudgetItem>();
 
             // Commands.
             AddItemCommand    = new Command(async () => await OnAddItemAsync());
-            DeleteItemCommand = new Command<Item>((x) => DeleteItem(x));
-            EditItemCommand   = new Command<Item>(async (x) => await EditItemAsync(x));
+            DeleteItemCommand = new Command<BudgetItem>((x) => DeleteItem(x));
+            EditItemCommand   = new Command<BudgetItem>(async (x) => await EditItemAsync(x));
         }
 
         #endregion
@@ -57,8 +58,8 @@ namespace AutarkyBudget.ViewModels
             IsBusy = true;
 
             Items.Clear();
-            IEnumerable<Item> items = _itemRepository.GetAll().OrderBy(x => x.CreationTime);
-            foreach (Item item in items ?? Enumerable.Empty<Item>())
+            IEnumerable<BudgetItem> items = _itemRepository.GetAll().OrderBy(x => x.CreationTime);
+            foreach (BudgetItem item in items ?? Enumerable.Empty<BudgetItem>())
             {
                 Items.Add(item);
             }
@@ -67,7 +68,7 @@ namespace AutarkyBudget.ViewModels
             IsBusy = false;
         }
 
-        private void DeleteItem(Item item)
+        private void DeleteItem(BudgetItem item)
         {
             IsBusy = true;
 
@@ -78,7 +79,7 @@ namespace AutarkyBudget.ViewModels
             IsBusy = false;
         }
 
-        private async Task EditItemAsync(Item item)
+        private async Task EditItemAsync(BudgetItem item)
         {
             await Shell.Current.GoToAsync($"{nameof(ItemPage)}?id={item.Id}");
         }

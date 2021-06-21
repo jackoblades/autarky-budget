@@ -1,4 +1,4 @@
-﻿using AutarkyBudget.Models;
+﻿using AutarkyBudget.Models.Data;
 using AutarkyBudget.Services.Interfaces;
 using SQLite;
 using System;
@@ -91,7 +91,7 @@ namespace AutarkyBudget.Services
             }
 
             // Create tables.
-            _connection.CreateTable<Item>();
+            _connection.CreateTable<BudgetItemData>();
 
             // Commit transaction.
             _connection.Commit();
@@ -350,7 +350,7 @@ namespace AutarkyBudget.Services
                 _connection.BeginTransaction();
 
                 // Drop all tables.
-                _connection.DropTable<Item>();
+                _connection.DropTable<BudgetItemData>();
 
                 // Recreate all tables.
                 CreateTables(true);

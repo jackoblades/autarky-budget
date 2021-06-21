@@ -1,5 +1,6 @@
-﻿using AutarkyBudget.Models;
+﻿using AutarkyBudget.Models.Domain;
 using AutarkyBudget.Repository.Interfaces;
+using NodaMoney;
 using System;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,7 +11,7 @@ namespace AutarkyBudget.ViewModels
     {
         #region Properties
 
-        private readonly IItemRepository _itemRepository;
+        private readonly IBudgetItemRepository _itemRepository;
 
         private DateTimeOffset? _knownTime = null;
 
@@ -37,7 +38,7 @@ namespace AutarkyBudget.ViewModels
         public ItemViewModel()
         {
             // Services.
-            _itemRepository = DependencyService.Get<IItemRepository>();
+            _itemRepository = DependencyService.Get<IBudgetItemRepository>();
 
             // Bindings.
             Title = "New";
@@ -65,12 +66,14 @@ namespace AutarkyBudget.ViewModels
 
         private async void ExecuteSave()
         {
-            var item = new Item()
+            _ = decimal.TryParse(Amount, out decimal amount);
+
+            var item = new BudgetItem()
             {
-                Id = string.IsNullOrEmpty(ItemId) ? Guid.NewGuid().ToString() : ItemId,
                 CreationTime = _knownTime ?? DateTimeOffset.Now,
+                Id = string.IsNullOrEmpty(ItemId) ? Guid.NewGuid().ToString() : ItemId,
+                Money = new Money(amount, "USD"),
                 Name = Name,
-                Amount = Amount,
             };
 
             _itemRepository.Upsert(item);
@@ -82,7 +85,7 @@ namespace AutarkyBudget.ViewModels
         {
             if (!string.IsNullOrEmpty(ItemId))
             {
-                Item item = _itemRepository.Get(ItemId);
+                BudgetItem item = _itemRepository.Get(ItemId);
                 _knownTime = item.CreationTime;
                 Name = item.Name;
                 Amount = item.Amount;

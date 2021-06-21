@@ -13,7 +13,7 @@ namespace AutarkyBudget.ViewModels
     {
         #region Properties
 
-        private readonly IItemRepository _itemRepository;
+        private readonly IBudgetItemRepository _itemRepository;
 
         public IEnumerable<string> ChartTypes { get; private set; }
 
@@ -57,7 +57,7 @@ namespace AutarkyBudget.ViewModels
         public ChartViewModel()
         {
             // Services.
-            _itemRepository = DependencyService.Get<IItemRepository>();
+            _itemRepository = DependencyService.Get<IBudgetItemRepository>();
 
             // Bindings.
             Title = "Budget";
